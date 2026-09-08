@@ -45,7 +45,7 @@ export const products: Product[] = [
     specs: 'USB 3.2 Gen 2 · 10 Gbps · 100W PD · 1 m',
     price: 12.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=UGREEN+USB-C+100W',
+    url: 'https://www.amazon.es/s?k=UGREEN+USB-C+100W&tag=flaxx-21',
     kinds: ['usb-c|usb-c'],
   },
   {
@@ -55,7 +55,7 @@ export const products: Product[] = [
     specs: 'USB4 · 40 Gbps · 240W · DP Alt Mode',
     price: 29.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=Anker+USB-C+240W+USB4',
+    url: 'https://www.amazon.es/s?k=Anker+USB-C+240W+USB4&tag=flaxx-21',
     kinds: ['usb-c|usb-c'],
   },
   {
@@ -75,7 +75,7 @@ export const products: Product[] = [
     specs: 'USB 3.1 · 5 Gbps · carga 3A · 1 m',
     price: 9.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=Belkin+USB-A+USB-C',
+    url: 'https://www.amazon.es/s?k=Belkin+USB-A+USB-C&tag=flaxx-21',
     kinds: ['usb-a|usb-c'],
   },
   {
@@ -85,7 +85,7 @@ export const products: Product[] = [
     specs: 'USB 2.0 · carga y datos · 1,8 m',
     price: 5.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=USB-A+Micro+USB',
+    url: 'https://www.amazon.es/s?k=USB-A+Micro+USB&tag=flaxx-21',
     kinds: ['micro-usb|usb-a'],
   },
   {
@@ -105,7 +105,7 @@ export const products: Product[] = [
     specs: 'MFi · carga rápida · 1 m',
     price: 19.0,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=USB-C+Lightning+MFi',
+    url: 'https://www.amazon.es/s?k=USB-C+Lightning+MFi&tag=flaxx-21',
     kinds: ['lightning|usb-c'],
   },
   {
@@ -115,7 +115,7 @@ export const products: Product[] = [
     specs: 'MFi · USB 2.0 · 1,8 m',
     price: 11.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=Anker+USB-A+Lightning',
+    url: 'https://www.amazon.es/s?k=Anker+USB-A+Lightning&tag=flaxx-21',
     kinds: ['lightning|usb-a'],
   },
   {
@@ -135,7 +135,7 @@ export const products: Product[] = [
     specs: '48 Gbps · 8K60 / 4K120 · eARC',
     price: 14.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=HDMI+2.1+8K',
+    url: 'https://www.amazon.es/s?k=HDMI+2.1+8K&tag=flaxx-21',
     kinds: ['hdmi|hdmi'],
   },
   {
@@ -145,7 +145,7 @@ export const products: Product[] = [
     specs: '18 Gbps · 4K60 · HDR',
     price: 7.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=HDMI+2.0+4K',
+    url: 'https://www.amazon.es/s?k=HDMI+2.0+4K&tag=flaxx-21',
     kinds: ['hdmi|hdmi'],
   },
   {
@@ -165,7 +165,7 @@ export const products: Product[] = [
     specs: 'DP Alt Mode · 4K60 · 1,8 m',
     price: 18.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=USB-C+HDMI+4K',
+    url: 'https://www.amazon.es/s?k=USB-C+HDMI+4K&tag=flaxx-21',
     kinds: ['hdmi|usb-c'],
   },
   {
@@ -175,7 +175,7 @@ export const products: Product[] = [
     specs: '8K30 / 4K120 · Alt Mode',
     price: 21.5,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=USB-C+DisplayPort+1.4',
+    url: 'https://www.amazon.es/s?k=USB-C+DisplayPort+1.4&tag=flaxx-21',
     kinds: ['displayport|usb-c'],
   },
   {
@@ -195,7 +195,7 @@ export const products: Product[] = [
     specs: 'Audio estéreo · OFC · 1,5 m',
     price: 6.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=jack+3.5+mm+cable',
+    url: 'https://www.amazon.es/s?k=jack+3.5+mm+cable&tag=flaxx-21',
     kinds: ['jack-35|jack-35'],
   },
   {
@@ -205,7 +205,7 @@ export const products: Product[] = [
     specs: 'DAC integrado · audio analógico',
     price: 10.0,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=USB-C+jack+3.5',
+    url: 'https://www.amazon.es/s?k=USB-C+jack+3.5&tag=flaxx-21',
     kinds: ['jack-35|usb-c'],
   },
   {
@@ -225,7 +225,7 @@ export const products: Product[] = [
     specs: 'Adaptador USB 3.0 · 1 Gbps',
     price: 17.99,
     store: 'amazon',
-    url: 'https://www.amazon.es/s?k=USB-C+ethernet+gigabit',
+    url: 'https://www.amazon.es/s?k=USB-C+ethernet+gigabit&tag=flaxx-21',
     kinds: ['ethernet|usb-c', 'ethernet|usb-a'],
   },
 ]

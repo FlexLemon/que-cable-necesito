@@ -42,17 +42,16 @@ const es = {
   privacy: 'Política de privacidad',
   terms: 'Términos de uso',
   aboutBody: 'Versión 1.1. Guía de cables y puertos. Puedes fotografiar el conector para identificarlo en el dispositivo.',
-  privacyBody:
-    'El historial se guarda solo en este dispositivo. Las fotos de puertos se analizan en el móvil y no se envían a ningún servidor. Los enlaces a Amazon son de afiliado (tag flaxx-21): si compras, Amazon puede pagar una comisión. No vendemos tus datos.',
+  privacyBody: 'El historial se guarda solo en este dispositivo. Las fotos de puertos se analizan en el móvil y no se envían a ningún servidor. No vendemos tus datos.',
   termsBody: 'Las recomendaciones son orientativas. Comprueba siempre la ficha del fabricante antes de comprar.',
   view: 'Ver',
   amazon: 'Amazon',
   pcc: 'PCComponentes',
   incompatible: 'Combinación no recomendada',
   emptyProducts: 'No hay productos para este filtro.',
-  affiliateDisclaimer:
-    'Como Asociado de Amazon, gano comisiones por las compras que cumplen los requisitos.',
   priceHint: '(orientativo)',
+  affiliateDisclaimer:
+    'Como Asociado de Amazon, gano comisiones por compras que cumplen los requisitos.',
 }
 
 const en: typeof es = {
@@ -98,15 +97,15 @@ const en: typeof es = {
   terms: 'Terms of use',
   aboutBody: 'Version 1.1. Cable and port guide. You can photograph the connector to identify it on-device.',
   privacyBody:
-    'History stays on this device. Port photos are analyzed on the phone and are not uploaded. Amazon links are affiliate links (tag flaxx-21): qualifying purchases may earn a commission. We do not sell your data.',
+    'History stays on this device. Port photos are analyzed on the phone and are not uploaded. We do not sell your data.',
   termsBody: 'Advice is indicative. Always check the manufacturer spec before buying.',
   view: 'View',
   amazon: 'Amazon',
   pcc: 'PCComponentes',
   incompatible: 'Not a recommended combo',
   emptyProducts: 'No products for this filter.',
-  affiliateDisclaimer: 'As an Amazon Associate I earn from qualifying purchases.',
   priceHint: '(indicative)',
+  affiliateDisclaimer: 'As an Amazon Associate I earn from qualifying purchases.',
 }
 
 export type Copy = typeof es

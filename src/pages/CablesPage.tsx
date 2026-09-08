@@ -34,9 +34,6 @@ export function CablesPage() {
           {t.pcc}
         </button>
       </div>
-      <p className="muted" style={{ marginBottom: 12 }}>
-        {t.affiliateDisclaimer}
-      </p>
       <div className="cards">
         {list.length === 0 ? <p className="muted">{t.emptyProducts}</p> : null}
         {list.map((p) => (
@@ -61,6 +58,7 @@ export function CablesPage() {
           </article>
         ))}
       </div>
+      <p className="affiliate-note">{t.affiliateDisclaimer}</p>
     </Shell>
   )
 }

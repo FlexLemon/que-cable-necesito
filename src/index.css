@@ -584,6 +584,16 @@ a {
   gap: 14px;
 }
 
+.affiliate-note {
+  margin-top: 28px;
+  font-size: 11px;
+  line-height: 1.35;
+  color: var(--muted);
+  opacity: 0.5;
+  text-align: center;
+  font-weight: 400;
+}
+
 .tabbar {
   position: sticky;
   bottom: 0;
