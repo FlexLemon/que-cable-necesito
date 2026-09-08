@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Qué cable necesito</string>
+    <string name="title_activity_main">Qué cable necesito</string>
+    <string name="package_name">app.quecable.necesito</string>
+    <string name="camera_permission">La app usa la cámara para identificar el puerto.</string>
+</resources>
