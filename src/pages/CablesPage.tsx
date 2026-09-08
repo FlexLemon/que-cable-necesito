@@ -3,6 +3,7 @@ import { Navigate } from 'react-router-dom'
 import { Shell } from '../components/Shell'
 import { useApp } from '../context/AppContext'
 import { productsFor, recommend } from '../lib/recommend'
+import { productUrl } from '../lib/affiliate'
 import type { StoreId } from '../types'
 
 export function CablesPage() {
@@ -33,6 +34,9 @@ export function CablesPage() {
           {t.pcc}
         </button>
       </div>
+      <p className="muted" style={{ marginBottom: 12 }}>
+        {t.affiliateDisclaimer}
+      </p>
       <div className="cards">
         {list.length === 0 ? <p className="muted">{t.emptyProducts}</p> : null}
         {list.map((p) => (
@@ -43,8 +47,13 @@ export function CablesPage() {
               <strong>{p.name}</strong>
               <span>{p.specs}</span>
               <div className="card-foot">
-                <b>{p.price.toFixed(2).replace('.', ',')} €</b>
-                <a className="mini-btn" href={p.url} target="_blank" rel="noreferrer">
+                <b>
+                  {p.price.toFixed(2).replace('.', ',')} €{' '}
+                  <span className="muted" style={{ fontWeight: 500 }}>
+                    {t.priceHint}
+                  </span>
+                </b>
+                <a className="mini-btn" href={productUrl(p)} target="_blank" rel="noopener noreferrer sponsored">
                   {t.view}
                 </a>
               </div>

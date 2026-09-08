@@ -97,6 +97,9 @@ export function HomePage() {
         </div>
         <h1>{t.appName}</h1>
         <p>{t.tagline}</p>
+        <p className="muted" style={{ maxWidth: '36ch' }}>
+          {t.affiliateDisclaimer}
+        </p>
         <div className="stack">
           <button
             className="btn secondary"

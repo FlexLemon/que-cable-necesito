@@ -79,6 +79,10 @@ function ResultReady() {
 
       {rec.note ? <p className="muted">{rec.note}</p> : null}
 
+      <p className="muted" style={{ marginBottom: 12 }}>
+        {t.affiliateDisclaimer}
+      </p>
+
       {!rec.incompatible ? (
         <PrimaryButton onClick={() => navigate('/cables')}>{t.seeCables}</PrimaryButton>
       ) : (
