@@ -5,8 +5,76 @@ export function portLabel(id: PortId): string {
   return ports.find((p) => p.id === id)?.name ?? id
 }
 
-export function kindKey(a: PortId, b: PortId): string {
-  return [a, b].sort().join('|')
+export function otherEndFor(port: PortId, usage: UsageId): PortId {
+  if (port === 'other') return 'other'
+
+  if (usage === 'charge') {
+    if (port === 'usb-c' || port === 'lightning') return 'usb-c'
+    if (port === 'micro-usb' || port === 'mini-usb' || port === 'usb-a') return 'usb-a'
+    return port
+  }
+
+  if (usage === 'data') {
+    if (port === 'ethernet') return 'ethernet'
+    if (port === 'usb-c' || port === 'lightning') return 'usb-c'
+    return 'usb-a'
+  }
+
+  if (usage === 'display') {
+    if (port === 'hdmi') return 'hdmi'
+    if (port === 'displayport') return 'displayport'
+    if (port === 'usb-c') return 'hdmi'
+    return port
+  }
+
+  if (usage === 'audio') {
+    if (port === 'hdmi') return 'hdmi'
+    return 'jack-35'
+  }
+
+  if (usage === 'network') {
+    return 'ethernet'
+  }
+
+  if (port === 'usb-c') return 'usb-a'
+  return 'usb-c'
+}
+
+export function recommendFromPort(port: PortId, usage: UsageId): Recommendation {
+  return recommend(port, otherEndFor(port, usage), usage)
+}
+
+export function usagesForPort(port: PortId): UsageId[] {
+  switch (port) {
+    case 'usb-c':
+      return ['charge', 'data', 'display', 'audio', 'network', 'adapt']
+    case 'usb-a':
+      return ['charge', 'data', 'adapt']
+    case 'micro-usb':
+    case 'mini-usb':
+      return ['charge', 'data']
+    case 'lightning':
+      return ['charge', 'data', 'audio', 'adapt']
+    case 'hdmi':
+      return ['display', 'audio']
+    case 'displayport':
+      return ['display']
+    case 'jack-35':
+      return ['audio']
+    case 'ethernet':
+      return ['network']
+    default:
+      return ['adapt']
+  }
+}
+
+export function portsForUsage(usage: UsageId): PortId[] {
+  if (usage === 'charge') return ['usb-c', 'usb-a', 'micro-usb', 'mini-usb', 'lightning', 'other']
+  if (usage === 'data') return ['usb-c', 'usb-a', 'micro-usb', 'mini-usb', 'lightning', 'ethernet', 'other']
+  if (usage === 'display') return ['usb-c', 'hdmi', 'displayport', 'other']
+  if (usage === 'audio') return ['jack-35', 'usb-c', 'lightning', 'hdmi', 'other']
+  if (usage === 'network') return ['ethernet', 'usb-c', 'usb-a', 'other']
+  return ports.map((p) => p.id)
 }
 
 export function recommend(
@@ -235,6 +303,10 @@ export function recommend(
       { title: 'Adaptador o cable híbrido', detail: 'Une conectores distintos; verifica si debe ser activo.' },
     ],
   }
+}
+
+function kindKey(a: PortId, b: PortId): string {
+  return [a, b].sort().join('|')
 }
 
 function incompatible(

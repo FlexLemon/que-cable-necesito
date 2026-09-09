@@ -1,4 +1,4 @@
-import type { Device, Port, Product, Usage } from '../types'
+import type { Device, DeviceId, Port, Product, Usage, UsageId } from '../types'
 
 export const devices: Device[] = [
   { id: 'laptop', name: 'Portátil', popular: true },
@@ -36,6 +36,23 @@ export const usages: Usage[] = [
   { id: 'network', name: 'Red', hint: 'Internet por cable' },
   { id: 'adapt', name: 'Adaptar / conectar', hint: 'Unir puertos distintos o un hub' },
 ]
+
+const allUsages: UsageId[] = ['charge', 'data', 'display', 'audio', 'network', 'adapt']
+
+export const usagesByDevice: Record<DeviceId, UsageId[]> = {
+  laptop: allUsages,
+  phone: ['charge', 'data', 'display', 'audio', 'adapt'],
+  tablet: ['charge', 'data', 'display', 'audio', 'adapt'],
+  monitor: ['display', 'data', 'audio', 'network'],
+  tv: ['display', 'audio', 'network'],
+  console: ['display', 'charge', 'audio', 'network'],
+  camera: ['charge', 'data'],
+  desktop: allUsages,
+  headphones: ['charge', 'audio'],
+  dock: ['charge', 'data', 'display', 'network', 'adapt'],
+  'generic-a': allUsages,
+  'generic-b': allUsages,
+}
 
 export const products: Product[] = [
   {

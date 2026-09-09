@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom'
 import { Shell } from '../components/Shell'
 import { useApp } from '../context/AppContext'
-import { devices } from '../data/catalog'
+import { devices, usages } from '../data/catalog'
 
 export function HistoryPage() {
   const { t, history, patchWizard } = useApp()
@@ -12,8 +12,8 @@ export function HistoryPage() {
       {history.length === 0 ? <p className="muted center">{t.noHistory}</p> : null}
       <div className="list">
         {history.map((h) => {
-          const da = devices.find((d) => d.id === h.deviceA)?.name
-          const db = devices.find((d) => d.id === h.deviceB)?.name
+          const device = devices.find((d) => d.id === h.deviceA)?.name
+          const usage = usages.find((u) => u.id === h.usage)?.name
           const date = new Date(h.createdAt).toLocaleDateString(undefined, {
             day: 'numeric',
             month: 'short',
@@ -27,7 +27,6 @@ export function HistoryPage() {
               onClick={() => {
                 patchWizard({
                   deviceA: h.deviceA,
-                  deviceB: h.deviceB,
                   portA: h.portA,
                   portB: h.portB,
                   usage: h.usage,
@@ -37,7 +36,8 @@ export function HistoryPage() {
             >
               <span className="row-text">
                 <strong>
-                  {da} + {db}
+                  {device}
+                  {usage ? ` · ${usage}` : ''}
                 </strong>
                 <small>
                   {h.cableLabel} · {date}

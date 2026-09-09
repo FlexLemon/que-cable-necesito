@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Navigate, useNavigate } from 'react-router-dom'
 import { PortGlyph } from '../components/Icons'
 import { PrimaryButton, Row, SecondaryButton, Shell } from '../components/Shell'
 import { useApp } from '../context/AppContext'
 import { ports } from '../data/catalog'
 import { capturePortPhoto } from '../lib/camera'
 import { detectPorts, type PortGuess } from '../lib/detectPort'
+import { otherEndFor, portsForUsage } from '../lib/recommend'
 import type { PortId } from '../types'
 
-export function CameraPage({ side }: { side: 'a' | 'b' }) {
-  const { t, patchWizard } = useApp()
+export function CameraPage() {
+  const { t, patchWizard, wizard } = useApp()
   const navigate = useNavigate()
   const [photo, setPhoto] = useState<string>()
   const [guesses, setGuesses] = useState<PortGuess[]>([])
@@ -17,15 +18,22 @@ export function CameraPage({ side }: { side: 'a' | 'b' }) {
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState('')
 
+  if (!wizard.deviceA || !wizard.usage) {
+    return <Navigate to="/" replace />
+  }
+
   async function shoot() {
     setError('')
     setBusy(true)
     try {
       const dataUrl = await capturePortPhoto()
       setPhoto(dataUrl)
+      const allowed = new Set(portsForUsage(wizard.usage!))
       const ranked = await detectPorts(dataUrl)
-      setGuesses(ranked)
-      setPicked(ranked[0]?.id)
+      const filtered = ranked.filter((g) => allowed.has(g.id))
+      const next = filtered.length ? filtered : ranked
+      setGuesses(next)
+      setPicked(next[0]?.id)
     } catch {
       setError(t.cameraCancel)
     } finally {
@@ -34,21 +42,15 @@ export function CameraPage({ side }: { side: 'a' | 'b' }) {
   }
 
   function confirm() {
-    if (!picked) return
-    if (side === 'a') {
-      patchWizard({ portA: picked, deviceA: 'generic-a' })
-      navigate('/foto/b')
-      return
-    }
-    patchWizard({ portB: picked, deviceB: 'generic-b' })
-    navigate('/uso')
+    if (!picked || !wizard.usage) return
+    patchWizard({ portA: picked, portB: otherEndFor(picked, wizard.usage) })
+    navigate('/resultado')
   }
 
-  const title = side === 'a' ? t.cameraA : t.cameraB
   const preview = ports.find((p) => p.id === picked)
 
   return (
-    <Shell title={title} back={side === 'a' ? '/' : '/foto/a'}>
+    <Shell title={t.takePortPhoto} back="/identificar">
       <p className="muted">{t.cameraHint}</p>
       {photo ? <img className="photo-preview" src={photo} alt="" /> : null}
       {busy ? <p className="muted center">{t.cameraAnalyzing}</p> : null}
@@ -87,16 +89,10 @@ export function CameraPage({ side }: { side: 'a' | 'b' }) {
 
       <div className="stack" style={{ marginTop: 16 }}>
         <PrimaryButton onClick={guesses.length ? confirm : shoot} disabled={busy || (Boolean(photo) && !picked)}>
-          {guesses.length ? t.confirmPort : t.takePhoto}
+          {guesses.length ? t.confirmPort : t.takePortPhoto}
         </PrimaryButton>
         {photo ? <SecondaryButton onClick={shoot}>{t.retake}</SecondaryButton> : null}
-        <button
-          className="btn secondary"
-          type="button"
-          onClick={() => navigate(side === 'a' ? '/puerto/a' : '/puerto/b')}
-        >
-          {t.pickManual}
-        </button>
+        <SecondaryButton onClick={() => navigate('/puerto')}>{t.pickPortManual}</SecondaryButton>
       </div>
     </Shell>
   )

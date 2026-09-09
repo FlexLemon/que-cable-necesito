@@ -3,12 +3,12 @@ import { Navigate, useNavigate } from 'react-router-dom'
 import { IconWarn, PortGlyph } from '../components/Icons'
 import { PrimaryButton, Shell } from '../components/Shell'
 import { useApp } from '../context/AppContext'
-import { devices } from '../data/catalog'
-import { recommend } from '../lib/recommend'
+import { devices, usages } from '../data/catalog'
+import { otherEndFor, recommendFromPort } from '../lib/recommend'
 
 export function ResultPage() {
   const { wizard } = useApp()
-  if (!wizard.portA || !wizard.portB || !wizard.usage) {
+  if (!wizard.deviceA || !wizard.portA || !wizard.usage) {
     return <Navigate to="/" replace />
   }
   return <ResultReady />
@@ -17,37 +17,37 @@ export function ResultPage() {
 function ResultReady() {
   const { t, wizard, addHistory } = useApp()
   const navigate = useNavigate()
-  const rec = recommend(wizard.portA!, wizard.portB!, wizard.usage!)
-  const da =
-    devices.find((d) => d.id === wizard.deviceA)?.name ?? (wizard.portA ? 'Equipo A' : '')
-  const db =
-    devices.find((d) => d.id === wizard.deviceB)?.name ?? (wizard.portB ? 'Equipo B' : '')
+  const rec = recommendFromPort(wizard.portA!, wizard.usage!)
+  const other = wizard.portB ?? otherEndFor(wizard.portA!, wizard.usage!)
+  const deviceName =
+    wizard.source === 'scan' ? t.scannedDevice : devices.find((d) => d.id === wizard.deviceA)?.name
+  const usageName = usages.find((u) => u.id === wizard.usage)?.name
 
   useEffect(() => {
     addHistory({
-      id: `${wizard.deviceA}-${wizard.portA}-${wizard.deviceB}-${wizard.portB}-${wizard.usage}`,
+      id: `${wizard.deviceA}-${wizard.portA}-${wizard.usage}`,
       createdAt: new Date().toISOString(),
-      deviceA: wizard.deviceA ?? 'generic-a',
-      deviceB: wizard.deviceB ?? 'generic-b',
+      deviceA: wizard.deviceA!,
+      deviceB: 'generic-b',
       portA: wizard.portA!,
-      portB: wizard.portB!,
+      portB: other,
       usage: wizard.usage!,
       cableLabel: rec.cableLabel,
     })
-  }, [addHistory, rec.cableLabel, wizard.deviceA, wizard.deviceB, wizard.portA, wizard.portB, wizard.usage])
+  }, [addHistory, rec.cableLabel, other, wizard.deviceA, wizard.portA, wizard.usage])
 
   return (
-    <Shell title={t.result} back="/uso">
+    <Shell title={t.result} back={wizard.source === 'scan' ? '/foto-panel' : '/identificar'}>
       <div className="result-hero">
         <div className="ends">
           <PortGlyph port={wizard.portA!} />
           <span className="link-line" />
-          <PortGlyph port={wizard.portB!} />
+          <PortGlyph port={other} />
         </div>
         <p className="kicker">{t.recommended}</p>
         <h2>{rec.cableLabel}</h2>
         <p className="muted">
-          {da} + {db}
+          {deviceName} · {usageName}
         </p>
       </div>
 

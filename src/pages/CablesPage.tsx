@@ -2,19 +2,19 @@ import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { Shell } from '../components/Shell'
 import { useApp } from '../context/AppContext'
-import { productsFor, recommend } from '../lib/recommend'
+import { productsFor, recommendFromPort } from '../lib/recommend'
 import { productUrl } from '../lib/affiliate'
 import type { StoreId } from '../types'
 
 export function CablesPage() {
   const { t, wizard } = useApp()
-  const [filter, setFilter] = useState<'all' | StoreId>('all')
+  const [filter, setFilter] = useState<'all' | StoreId>('amazon')
 
-  if (!wizard.portA || !wizard.portB || !wizard.usage) {
+  if (!wizard.portA || !wizard.usage) {
     return <Navigate to="/" replace />
   }
 
-  const rec = recommend(wizard.portA, wizard.portB, wizard.usage)
+  const rec = recommendFromPort(wizard.portA, wizard.usage)
   const list = productsFor(rec.kind).filter((p) => filter === 'all' || p.store === filter)
 
   return (

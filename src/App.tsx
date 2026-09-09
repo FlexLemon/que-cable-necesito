@@ -1,7 +1,9 @@
 import { HashRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { AppProvider } from './context/AppContext'
 import { DevicePage, HomePage } from './pages/HomeDevices'
+import { IdentifyPage } from './pages/IdentifyPage'
 import { CameraPage } from './pages/CameraPage'
+import { ScanPage } from './pages/ScanPage'
 import { PortPage } from './pages/PortPage'
 import { UsagePage } from './pages/UsagePage'
 import { ResultPage } from './pages/ResultPage'
@@ -15,13 +17,12 @@ export default function App() {
       <HashRouter>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          <Route path="/foto/a" element={<CameraPage side="a" />} />
-          <Route path="/foto/b" element={<CameraPage side="b" />} />
-          <Route path="/dispositivo/a" element={<DevicePage side="a" />} />
-          <Route path="/dispositivo/b" element={<DevicePage side="b" />} />
-          <Route path="/puerto/a" element={<PortPage side="a" />} />
-          <Route path="/puerto/b" element={<PortPage side="b" />} />
+          <Route path="/dispositivo" element={<DevicePage />} />
           <Route path="/uso" element={<UsagePage />} />
+          <Route path="/identificar" element={<IdentifyPage />} />
+          <Route path="/foto" element={<CameraPage />} />
+          <Route path="/foto-panel" element={<ScanPage />} />
+          <Route path="/puerto" element={<PortPage />} />
           <Route path="/resultado" element={<ResultPage />} />
           <Route path="/cables" element={<CablesPage />} />
           <Route path="/historial" element={<HistoryPage />} />

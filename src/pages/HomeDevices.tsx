@@ -35,12 +35,11 @@ const icons: Record<DeviceId, typeof IconLaptop> = {
   'generic-b': IconMonitor,
 }
 
-export function DevicePage({ side }: { side: 'a' | 'b' }) {
+export function DevicePage() {
   const { t, patchWizard, wizard } = useApp()
   const navigate = useNavigate()
   const [q, setQ] = useState('')
   const [tab, setTab] = useState<'popular' | 'all'>('popular')
-  const selected = side === 'a' ? wizard.deviceA : wizard.deviceB
 
   const list = devices.filter((d) => {
     if (d.id === 'generic-a' || d.id === 'generic-b') return false
@@ -51,7 +50,7 @@ export function DevicePage({ side }: { side: 'a' | 'b' }) {
   })
 
   return (
-    <Shell title={side === 'a' ? t.deviceA : t.deviceB} back={side === 'a' ? '/' : '/puerto/a'}>
+    <Shell title={t.pickDevice} back="/">
       <label className="search">
         <IconSearch />
         <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.search} />
@@ -72,10 +71,10 @@ export function DevicePage({ side }: { side: 'a' | 'b' }) {
               key={d.id}
               icon={<Icon />}
               title={d.name}
-              selected={selected === d.id}
+              selected={wizard.deviceA === d.id}
               onClick={() => {
-                patchWizard(side === 'a' ? { deviceA: d.id } : { deviceB: d.id })
-                navigate(side === 'a' ? '/puerto/a' : '/puerto/b')
+                patchWizard({ deviceA: d.id, usage: undefined, portA: undefined, portB: undefined })
+                navigate('/uso')
               }}
             />
           )
@@ -99,26 +98,26 @@ export function HomePage() {
         <p>{t.tagline}</p>
         <div className="stack">
           <button
-            className="btn secondary"
-            type="button"
-            onClick={() => {
-              resetWizard()
-              navigate('/foto/a')
-            }}
-          >
-            <IconCamera />
-            {t.takePhoto}
-          </button>
-          <button
             className="btn primary"
             type="button"
             onClick={() => {
               resetWizard()
-              navigate('/dispositivo/a')
+              navigate('/dispositivo')
             }}
           >
             <IconSearch />
-            {t.searchDevice}
+            {t.pickDevice}
+          </button>
+          <button
+            className="btn secondary"
+            type="button"
+            onClick={() => {
+              resetWizard()
+              navigate('/foto-panel', { state: { auto: true } })
+            }}
+          >
+            <IconCamera />
+            {t.photoPanel}
           </button>
         </div>
         <p className="affiliate-note">{t.affiliateDisclaimer}</p>

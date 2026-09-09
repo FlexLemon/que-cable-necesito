@@ -136,3 +136,160 @@ export async function detectPorts(dataUrl: string): Promise<PortGuess[]> {
     .sort((a, b) => b.score - a.score)
     .slice(0, 4)
 }
+
+function rasterize(img: HTMLImageElement, width = 320) {
+  const w = width
+  const h = Math.max(80, Math.round((img.height / img.width) * w))
+  const canvas = document.createElement('canvas')
+  canvas.width = w
+  canvas.height = h
+  const ctx = canvas.getContext('2d', { willReadFrequently: true })
+  if (!ctx) return null
+  ctx.drawImage(img, 0, 0, w, h)
+  return { w, h, data: ctx.getImageData(0, 0, w, h).data }
+}
+
+function lumaAt(data: Uint8ClampedArray, w: number, x: number, y: number) {
+  const i = (y * w + x) * 4
+  return 0.299 * data[i] + 0.587 * data[i + 1] + 0.114 * data[i + 2]
+}
+
+function analyzeRegion(
+  data: Uint8ClampedArray,
+  w: number,
+  h: number,
+  x0: number,
+  y0: number,
+  x1: number,
+  y1: number,
+): Shape {
+  const left = Math.max(0, Math.floor(x0))
+  const top = Math.max(0, Math.floor(y0))
+  const right = Math.min(w, Math.ceil(x1))
+  const bottom = Math.min(h, Math.ceil(y1))
+  const lumas: number[] = []
+  for (let y = top; y < bottom; y++) {
+    for (let x = left; x < right; x++) lumas.push(lumaAt(data, w, x, y))
+  }
+  const mean = lumas.reduce((a, b) => a + b, 0) / Math.max(1, lumas.length)
+  const threshold = Math.min(110, mean * 0.72)
+  let minX = w
+  let minY = h
+  let maxX = 0
+  let maxY = 0
+  let dark = 0
+  let total = 0
+  for (let y = top; y < bottom; y++) {
+    for (let x = left; x < right; x++) {
+      total++
+      if (lumaAt(data, w, x, y) < threshold) {
+        dark++
+        if (x < minX) minX = x
+        if (y < minY) minY = y
+        if (x > maxX) maxX = x
+        if (y > maxY) maxY = y
+      }
+    }
+  }
+  const bw = Math.max(1, maxX - minX)
+  const bh = Math.max(1, maxY - minY)
+  const area = dark
+  const peri = 2 * (bw + bh)
+  return {
+    aspect: bw / bh,
+    fill: dark / (bw * bh),
+    size: bw / w,
+    circularity: (4 * Math.PI * area) / Math.max(1, peri * peri),
+    darkShare: dark / Math.max(1, total),
+  }
+}
+
+function bestGuess(shape: Shape): PortGuess {
+  return CANDIDATES.map((id) => ({ id, score: scoreShape(id, shape) })).sort((a, b) => b.score - a.score)[0]
+}
+
+function collectGuesses(raster: { w: number; h: number; data: Uint8ClampedArray }) {
+  const { w, h, data } = raster
+  const found = new Map<PortId, number>()
+  const add = (guess: PortGuess) => {
+    if (!guess || guess.score < 6 || guess.id === 'other') return
+    found.set(guess.id, Math.max(found.get(guess.id) ?? 0, guess.score))
+  }
+
+  add(bestGuess(analyzeRegion(data, w, h, w * 0.08, h * 0.12, w * 0.92, h * 0.88)))
+
+  const cols = 4
+  const rows = 3
+  for (let row = 0; row < rows; row++) {
+    for (let col = 0; col < cols; col++) {
+      const padX = w * 0.02
+      const padY = h * 0.04
+      const x0 = (w / cols) * col + padX
+      const y0 = (h / rows) * row + padY
+      const x1 = (w / cols) * (col + 1) - padX
+      const y1 = (h / rows) * (row + 1) - padY
+      add(bestGuess(analyzeRegion(data, w, h, x0, y0, x1, y1)))
+    }
+  }
+
+  const mean =
+    Array.from({ length: w * h }, (_, i) => lumaAt(data, w, i % w, Math.floor(i / w))).reduce((a, b) => a + b, 0) /
+    (w * h)
+  const threshold = Math.min(105, mean * 0.68)
+  const visited = new Uint8Array(w * h)
+  const minArea = Math.floor(w * h * 0.004)
+  const maxArea = Math.floor(w * h * 0.28)
+
+  for (let y = 1; y < h - 1; y++) {
+    for (let x = 1; x < w - 1; x++) {
+      const start = y * w + x
+      if (visited[start] || lumaAt(data, w, x, y) >= threshold) continue
+      const stack = [start]
+      visited[start] = 1
+      let minX = x
+      let minY = y
+      let maxX = x
+      let maxY = y
+      let area = 0
+      while (stack.length) {
+        const idx = stack.pop()!
+        area++
+        const cx = idx % w
+        const cy = Math.floor(idx / w)
+        if (cx < minX) minX = cx
+        if (cy < minY) minY = cy
+        if (cx > maxX) maxX = cx
+        if (cy > maxY) maxY = cy
+        for (const [nx, ny] of [
+          [cx - 1, cy],
+          [cx + 1, cy],
+          [cx, cy - 1],
+          [cx, cy + 1],
+        ]) {
+          if (nx < 0 || ny < 0 || nx >= w || ny >= h) continue
+          const nidx = ny * w + nx
+          if (visited[nidx] || lumaAt(data, w, nx, ny) >= threshold) continue
+          visited[nidx] = 1
+          stack.push(nidx)
+        }
+      }
+      if (area < minArea || area > maxArea) continue
+      const pad = 6
+      add(bestGuess(analyzeRegion(data, w, h, minX - pad, minY - pad, maxX + pad, maxY + pad)))
+    }
+  }
+
+  return [...found.entries()]
+    .map(([id, score]) => ({ id, score }))
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 6)
+}
+
+export async function detectPortPanel(dataUrl: string): Promise<PortGuess[]> {
+  const img = await loadImage(dataUrl)
+  const raster = rasterize(img)
+  if (!raster) return detectPorts(dataUrl)
+  const panel = collectGuesses(raster)
+  if (panel.length) return panel
+  return (await detectPorts(dataUrl)).filter((g) => g.id !== 'other').slice(0, 3)
+}

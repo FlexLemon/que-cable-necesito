@@ -94,6 +94,7 @@ export type WizardState = {
   deviceB?: DeviceId
   portB?: PortId
   usage?: UsageId
+  source?: 'device' | 'scan'
 }
 
 export type Theme = 'light' | 'dark'
