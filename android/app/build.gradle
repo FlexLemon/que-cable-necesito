@@ -7,10 +7,10 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    namespace = "app.quecable.necesito"
+    namespace = "com.dk.quecablenececito"
     compileSdk = rootProject.ext.compileSdkVersion
     defaultConfig {
-        applicationId "app.quecable.necesito"
+        applicationId "com.dk.quecablenececito"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 6

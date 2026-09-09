@@ -1,7 +1,7 @@
 import type { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'app.quecable.necesito',
+  appId: 'com.dk.quecablenececito',
   appName: 'Qué cable necesito',
   webDir: 'dist',
   android: {

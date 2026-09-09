@@ -1,4 +1,4 @@
-package app.quecable.necesito;
+package com.dk.quecablenececito;
 
 import com.getcapacitor.BridgeActivity;
 
