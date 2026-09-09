@@ -1,0 +1,15 @@
+Título: Qué cable necesito
+Descripción breve: Te dice el cable que necesitas según el dispositivo, el uso o una foto del puerto.
+
+Descripción completa:
+¿No sabes si te hace falta USB-C, HDMI o un adaptador? Esta app te lo dice.
+
+Elige el dispositivo y lo que quieres hacer (cargar, pasar archivos, conectar una pantalla…). También puedes fotografiar el puerto o un panel de conectores. Te recomendamos el cable concreto, con requisitos reales, y enlaces para comprarlo.
+
+Las fotos se analizan en el móvil. El historial se guarda solo en el dispositivo.
+
+Como Asociado de Amazon, el desarrollador puede recibir comisiones por compras que cumplen los requisitos.
+
+Categoría: Herramientas
+Correo: feedback@quecable.app
+Privacidad: https://flexlemon.github.io/que-cable-necesito/privacidad.html
