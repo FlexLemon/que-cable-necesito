@@ -45,7 +45,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
     saveTheme(theme)
     document.documentElement.dataset.theme = theme
   }, [theme])
-  useEffect(() => saveLang(lang), [lang])
+  useEffect(() => {
+    saveLang(lang)
+    document.documentElement.lang = lang
+  }, [lang])
   useEffect(() => saveNotif(notif), [notif])
 
   useEffect(() => {

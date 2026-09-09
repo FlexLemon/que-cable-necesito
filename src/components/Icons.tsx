@@ -3,17 +3,24 @@ type IconProps = { className?: string }
 export function CableMark({ className }: IconProps) {
   return (
     <svg className={className} viewBox="0 0 88 88" fill="none" aria-hidden>
-      <rect x="8" y="8" width="72" height="72" rx="20" fill="var(--primary-soft)" />
+      <defs>
+        <linearGradient id="cable-grad" x1="18" y1="10" x2="72" y2="80">
+          <stop offset="0" stopColor="#5cf0ff" />
+          <stop offset="0.45" stopColor="#3b82f6" />
+          <stop offset="1" stopColor="#1d4ed8" />
+        </linearGradient>
+      </defs>
+      <rect x="4" y="4" width="80" height="80" rx="22" fill="#070b14" />
+      <rect x="16" y="30" width="15" height="10" rx="2.2" fill="url(#cable-grad)" />
       <path
-        d="M28 36h10l4 16h4l4-16h10"
-        stroke="var(--primary)"
-        strokeWidth="3.2"
+        d="M31 35h8M47 20c14 1 18 16 8 24-8 6-10 10-10 16"
+        stroke="url(#cable-grad)"
+        strokeWidth="7.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <circle cx="28" cy="36" r="5" stroke="var(--primary)" strokeWidth="3.2" />
-      <circle cx="60" cy="36" r="5" stroke="var(--primary)" strokeWidth="3.2" />
-      <path d="M34 52h20" stroke="var(--primary)" strokeWidth="3.2" strokeLinecap="round" />
+      <rect x="40" y="12" width="16" height="10" rx="5" fill="url(#cable-grad)" />
+      <circle cx="45" cy="72" r="5.2" fill="url(#cable-grad)" />
     </svg>
   )
 }

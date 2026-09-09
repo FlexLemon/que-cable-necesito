@@ -1,10 +1,9 @@
 import { useState } from 'react'
+import { PrefsBar } from '../components/PrefsBar'
 import { Shell } from '../components/Shell'
 import { useApp } from '../context/AppContext'
-import type { Lang, Theme } from '../types'
-
 export function SettingsPage() {
-  const { t, theme, setTheme, lang, setLang, notif, setNotif, clearHistory } = useApp()
+  const { t, notif, setNotif, clearHistory } = useApp()
   const [modal, setModal] = useState<'about' | 'privacy' | 'terms' | null>(null)
 
   const body =
@@ -17,20 +16,9 @@ export function SettingsPage() {
           <span>{t.notifications}</span>
           <input type="checkbox" checked={notif} onChange={(e) => setNotif(e.target.checked)} />
         </label>
-        <label className="setting">
-          <span>{t.language}</span>
-          <select value={lang} onChange={(e) => setLang(e.target.value as Lang)}>
-            <option value="es">Español</option>
-            <option value="en">English</option>
-          </select>
-        </label>
-        <label className="setting">
-          <span>{t.theme}</span>
-          <select value={theme} onChange={(e) => setTheme(e.target.value as Theme)}>
-            <option value="light">{t.light}</option>
-            <option value="dark">{t.dark}</option>
-          </select>
-        </label>
+        <div className="setting prefs-setting">
+          <PrefsBar />
+        </div>
         <button className="setting danger" type="button" onClick={clearHistory}>
           {t.clearHistory}
         </button>

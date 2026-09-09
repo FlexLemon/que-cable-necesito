@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
-  CableMark,
   IconCamera,
   IconLaptop,
   IconPhone,
@@ -16,8 +15,10 @@ import {
   IconDock,
 } from '../components/Icons'
 import { Row, Shell } from '../components/Shell'
+import { PrefsBar } from '../components/PrefsBar'
 import { useApp } from '../context/AppContext'
 import { devices } from '../data/catalog'
+import { APP_VERSION } from '../lib/version'
 import type { DeviceId } from '../types'
 
 const icons: Record<DeviceId, typeof IconLaptop> = {
@@ -90,37 +91,55 @@ export function HomePage() {
 
   return (
     <Shell>
-      <section className="hero-home">
-        <div className="mark-wrap">
-          <CableMark className="mark-camera" />
+      <section className="home-screen">
+        <div className="home-orb home-orb-a" />
+        <div className="home-orb home-orb-b" />
+        <div className="hero-home">
+          <div className="mark-wrap">
+            <img className="mark-camera" src={`${import.meta.env.BASE_URL}icon-512.png`} alt="" />
+          </div>
+          <h1>{t.appName}</h1>
+          <p>{t.tagline}</p>
+          <div className="home-actions">
+            <button
+              className="action-card"
+              type="button"
+              onClick={() => {
+                resetWizard()
+                navigate('/dispositivo')
+              }}
+            >
+              <span className="action-icon">
+                <IconSearch />
+              </span>
+              <span className="action-copy">
+                <strong>{t.pickDevice}</strong>
+                <small>{t.usage}</small>
+              </span>
+            </button>
+            <button
+              className="action-card action-card-alt"
+              type="button"
+              onClick={() => {
+                resetWizard()
+                navigate('/foto-panel', { state: { auto: true } })
+              }}
+            >
+              <span className="action-icon">
+                <IconCamera />
+              </span>
+              <span className="action-copy">
+                <strong>{t.photoPanel}</strong>
+                <small>{t.takePortPhotoHint}</small>
+              </span>
+            </button>
+          </div>
         </div>
-        <h1>{t.appName}</h1>
-        <p>{t.tagline}</p>
-        <div className="stack">
-          <button
-            className="btn primary"
-            type="button"
-            onClick={() => {
-              resetWizard()
-              navigate('/dispositivo')
-            }}
-          >
-            <IconSearch />
-            {t.pickDevice}
-          </button>
-          <button
-            className="btn secondary"
-            type="button"
-            onClick={() => {
-              resetWizard()
-              navigate('/foto-panel', { state: { auto: true } })
-            }}
-          >
-            <IconCamera />
-            {t.photoPanel}
-          </button>
+        <div className="home-bottom">
+          <PrefsBar />
+          <p className="affiliate-note">{t.affiliateDisclaimer}</p>
         </div>
-        <p className="affiliate-note">{t.affiliateDisclaimer}</p>
+        <span className="app-version">v{APP_VERSION}</span>
       </section>
     </Shell>
   )
